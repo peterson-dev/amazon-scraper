@@ -1,6 +1,7 @@
 import requests 
 from bs4 import BeautifulSoup
 import smtplib
+import time
 
 URL = 'https://www.amazon.com/BenQ-EX3501R-Gaming-Monitor-FreeSync/dp/B077P62F8X/ref=sr_1_3?keywords=benq+ex3501r&qid=1562621606&s=gateway&sr=8-3'
  
@@ -19,11 +20,11 @@ def check_price():
     price = soup.find(id="priceblock_ourprice").get_text()
     converted_price = int(price[1:4])
 
-    if(converted_price < 525):
+    if(converted_price > 525):
         send_mail()
 
     print(title.strip())
-    print(converted_price)
+    print(f"${converted_price}")
 
 
 def send_mail():
@@ -33,7 +34,7 @@ def send_mail():
     server.ehlo()
 
     server.login('dansvans.peters@gmail.com', 'gtczbvastzlzttsz')
-    
+    # secure credentials because 2FA is enabled for google (two step verification required from untrusted devices)
     subject = "Price fell down!"
     body = "Check the amazon link https://www.amazon.com/BenQ-EX3501R-Gaming-Monitor-FreeSync/dp/B077P62F8X/ref=sr_1_3?keywords=benq+ex3501r&qid=1562621606&s=gateway&sr=8-3"
 
@@ -48,8 +49,9 @@ def send_mail():
 
     server.quit()
 
-
-check_price()
+while True:
+    check_price()
+    time.sleep(60*60*24)
 # page = requests.get(URL, headers=headers)
 
 # soup = BeautifulSoup(page.content, 'html.parser')
