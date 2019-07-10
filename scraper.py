@@ -1,3 +1,5 @@
+# https://www.youtube.com/watch?v=Bg9r_yLk7VY
+
 import requests 
 from bs4 import BeautifulSoup
 import smtplib
